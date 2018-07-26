@@ -1,8 +1,9 @@
+import { AppPermissionsService } from './services/app-permissions.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgxPermissionsModule, NgxPermissionsService } from 'ngx-permissions';
 
 import { AppComponent } from './app.component';
-import { NgxPermissionsModule } from 'ngx-permissions';
 
 @NgModule({
   declarations: [
@@ -13,13 +14,15 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     NgxPermissionsModule.forRoot()
   ],
   providers: [
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: (ds: DictionaryService, ps: NgxPermissionsService) => function () { return ds.load().then((data) => { return ps.loadPermissions(data) }) },
-    //   deps: [LoadService, NgxPermissionsService],
-    //   multi: true
-    // }
-
+    AppPermissionsService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (ds: AppPermissionsService, ps: NgxPermissionsService) => function () {
+        ds.load().then((data) => ps.loadPermissions(data));
+      },
+      deps: [AppPermissionsService, NgxPermissionsService],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
