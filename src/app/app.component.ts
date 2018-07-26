@@ -1,3 +1,4 @@
+import { NgxPermissionsService } from 'ngx-permissions';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor(private ngxPermissionsService: NgxPermissionsService) {
+    ngxPermissionsService.loadPermissions(['showTourOfHeroesLink', 'showCliDocumentationLink']);
+  }
 }
